@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
 
 	SDL_SetMainReady();
 
-	if(argc < 3) {
+	if(argc < 3 && getuid() != 0) {
 		printf("Usage: %s some.bmp some.ttf\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
