@@ -469,10 +469,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-#if 0
-	SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_WIDTH, 0, &window, &renderer);
-#endif
-
 	TTF_Init();
 	font = TTF_OpenFont(argv[2], 15);
 	if (font == NULL) {
@@ -500,16 +496,7 @@ int main(int argc, char *argv[])
 	int pitch = image->pitch;
 	int pxlength = pitch * image->h;
 	unsigned char *pixels = NULL;
-#if 0
-	// Vertical flip the image data of the surface
-	unsigned char *ppixels = (unsigned char*)surface->pixels;
-	for (int line = 0; line < image->h; ++line) {
-		memcpy(ppixels, pixels, pitch);
-		pixels -= pitch;
-		ppixels += pitch;
-	}
-#endif
-#if 1
+
 	if ((fd = open("/dev/fb1", O_RDWR)) < 0) {
 		perror("can't open device");
 		abort();
@@ -545,25 +532,6 @@ int main(int argc, char *argv[])
 	}
 	close(fd);
 	close(fd_dt);
-#else
-	// Create Texture from surface
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	int quit = 0;
-	while (!quit) {
-		while (SDL_PollEvent(&event) == 1) {
-			if (event.type == SDL_QUIT) {
-				quit = 1;
-			}
-		}
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		SDL_RenderClear(renderer);
-
-		/* Use TTF textures. */
-		SDL_RenderCopy(renderer, texture, NULL, &imageRect);
-
-		SDL_RenderPresent(renderer);
-	}
-#endif
     return 0;
 }
