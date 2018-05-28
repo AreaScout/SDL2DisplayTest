@@ -32,9 +32,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#define WINDOW_WIDTH 320
-#define WINDOW_HEIGHT 240
-
 #define USERSWITCH "/sys/class/gpio/gpio24/value"
 #define PIN 24
 
@@ -71,8 +68,6 @@ void *watchdog_thread(void *param)
 			draw_osd = true;
 		} else if(c == 0x31) {
 			draw_osd = false;
-		} else {
-			c = 0xff;
 		}
 	}
 }
@@ -229,6 +224,7 @@ void readSensors()
 
 	if ((fd = fopen ("/sys/devices/10060000.tmu/temp", "r")) == NULL) {
 		fprintf (stderr, "Unable to open sysfs for temperature reading: %s\n", strerror (errno));
+		return;
 	}
 
 	fseek (fd , 0 , SEEK_END);
@@ -263,8 +259,10 @@ void readSensors()
 	fclose(fd);
 	
 	fd = fopen("/proc/stat", "r");
-	if (fd == NULL)
+	if (fd == NULL) {
 		fprintf (stderr, "Unable to open proc file system: %s\n", strerror (errno));
+		return;
+	}
 
 	while (fgets(buf, 80, fd)) {
 		if (!strncmp(buf, "cpu", 3)) {
@@ -283,8 +281,10 @@ void readSensors()
 		char freq_path[60] = {0};
 		sprintf(freq_path, "/sys/devices/system/cpu/cpu%d/cpufreq/scaling_cur_freq", i);
 		fd = fopen(freq_path, "r");
-		if (fd == NULL)
+		if (fd == NULL) {
 			fprintf (stderr, "Unable to open proc file system: %s\n", strerror (errno));
+			return;
+		}
 
 		fgets(line, 256 , fd);
 
@@ -297,8 +297,10 @@ void readSensors()
 	}
 
 	fd = fopen("/proc/meminfo", "r");
-	if (fd == NULL)
+	if (fd == NULL) {
 		fprintf (stderr, "Unable to open proc file system: %s\n", strerror (errno));
+		return;
+	}
 
 	std::stringstream mem_tmp;
 	while (fgets(line, 256 , fd)) {
@@ -319,8 +321,10 @@ void readSensors()
 	mem_string = std::string(mem_str);
 
 	fd = fopen("/sys/devices/11800000.mali/clock", "r");
-	if (fd == NULL)
+	if (fd == NULL) {
 		fprintf (stderr, "Unable to open proc file system: %s\n", strerror (errno));
+		return;
+	}
 
 	fgets(line, 256 , fd);
 
@@ -333,8 +337,10 @@ void readSensors()
 	fclose(fd);
 
 	fd = fopen("/sys/devices/11800000.mali/gpuinfo", "r");
-	if (fd == NULL)
+	if (fd == NULL) {
         fprintf (stderr, "Unable to open sys file system: %s\n", strerror (errno));
+		return;
+	}
 
 	fgets(line, 256 , fd);
 
@@ -344,8 +350,10 @@ void readSensors()
 	fclose(fd);
 
 	fd = fopen("/sys/devices/platform/exynos-drm/drm/card0/card0-HDMI-A-1/status", "r");
-	if (fd == NULL)
+	if (fd == NULL) {
 		fprintf (stderr, "Unable to open sys file system: %s\n", strerror (errno));
+		return;
+	}
 
 	fgets(line, 256 , fd);
 
@@ -477,7 +485,6 @@ int main(int argc, char *argv[])
 	}
 
 	SDL_Surface *image = SDL_LoadBMP(argv[1]);
-	SDL_Rect imageRect = { 0, 0, 320, 240 };
 
 	SDL_Surface *dark_surface = SDL_CreateRGBSurface(0, image->w, image->h, 32, rmask32, gmask32, bmask32, amask32);
 	SDL_FillRect(dark_surface, NULL, SDL_MapRGBA(dark_surface->format, 0, 0, 0, 128));
