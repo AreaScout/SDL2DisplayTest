@@ -51,7 +51,6 @@ std::string gpu_string;
 std::string connect_string;
 std::string hdd_string;
 std::string mem_string;
-std::stringstream cpu_usage;
 TTF_Font *font = NULL;
 
 void *watchdog_thread(void *param)
@@ -267,9 +266,8 @@ void readSensors()
 	while (fgets(buf, 80, fd)) {
 		if (!strncmp(buf, "cpu", 3)) {
 			sscanf(buf, "%s %d %d %d %d", cpuid, &user, &nice, &system, &idle, &wait, &irq, &srq);
+			// CPU Usage integer array
 			usage[cpu_index] = calUsage(cpu_index, user, nice, system, idle, wait, irq, srq);
-			// CPU Usage stringstream
-			cpu_usage << ", " << cpuid << " " << usage[cpu_index] << "%";
 			cpu_index++;
 		}
 		if (!strncmp(buf, "intr", 4))
