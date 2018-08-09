@@ -1,6 +1,6 @@
 # SDL2DisplayTest
 
-![SDL2DisplayTest](http://www.hardkernel.com/main/_Files/prdt/2018/201805/201805120009102637.jpg)
+![SDL2DisplayTest](https://www.hardkernel.com/main/_Files/prdt/2018/201805/201805120009102637.jpg)
 
 This is an OSD SDL2Display Test for the new OGST Gaming Console Kit from Hardkernel, it listens for a event from the right user button on
 the console. The program will run as a deamon to easily add it on startup scripts. You can add your own image which is of type Bitmap RGB565 and also TureTypeFonts
