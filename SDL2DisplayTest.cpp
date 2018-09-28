@@ -1,5 +1,14 @@
-// SDL2DisplayTest.cpp : Defines the entry point for the console application.
-//
+/*
+ * SDL2DisplayTest Copyright (C) 2018 Daniel Mehrwald
+ *
+ * Demonstration tool, howto access user button and display of OGST Gaming Kit
+ *
+ * This program is free software and comes with ABSOLUTELY NO WARRANTY;
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ */
 
 #include <algorithm>
 #include <assert.h>
